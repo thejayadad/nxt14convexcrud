@@ -1,5 +1,5 @@
 
-import { mutation } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
 import { v } from 'convex/values';
 
 // Assuming ctx.db is your database context
@@ -14,3 +14,10 @@ export const createTask = mutation({
     return newTaskId;
   },
 });
+
+
+export const getTask = query({
+  handler: async (ctx) => {
+    return ctx.db.query("tasks").collect()
+  }
+})

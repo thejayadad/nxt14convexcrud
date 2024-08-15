@@ -1,12 +1,13 @@
 'use client'
 import { useState } from "react"
 import { api } from "@/convex/_generated/api"
-import { useMutation } from "convex/react"
+import { useMutation, useQuery } from "convex/react"
 
 export default function Home() {
   const [text, setText] = useState("")
   const [status, setStatus] = useState(false) // Default status is false
   const createTask = useMutation(api.task.createTask)
+  const tasks = useQuery(api.task.getTask) || [];
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -49,6 +50,27 @@ export default function Home() {
             Add Task
           </button>
         </form>
+        <div className="flex flex-col gap-8 w-full">
+        <h2 className="text-2xl font-bold text-center mt-4 text-neutral-700">Add Task</h2>
+        <div>
+            {tasks.length === 0 ? (
+              <p>No tasks available</p>
+            ) : (
+              tasks.map((task) => (
+                <div key={task.id} className="flex items-center w-full">
+                  <div className="flex justify-between items-center w-full border p-4">
+                    <div>
+                    <p>{task.text}</p>
+                    </div>
+                    <div>
+                      Delete
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
       </div>
     </div>
   )
