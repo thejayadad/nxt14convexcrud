@@ -1,7 +1,4 @@
 'use client'
-// pages/index.tsx (or components/Home.js if using that file)
-
-'use client'
 import { useState } from "react"
 import { api } from "@/convex/_generated/api"
 import { useMutation } from "convex/react"
