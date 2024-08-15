@@ -1,4 +1,5 @@
 'use client'
+'use client'
 import { useState } from "react"
 import { api } from "@/convex/_generated/api"
 import { useMutation, useQuery } from "convex/react"
@@ -7,6 +8,7 @@ export default function Home() {
   const [text, setText] = useState("")
   const [status, setStatus] = useState(false) // Default status is false
   const createTask = useMutation(api.task.createTask)
+  const deleteTask = useMutation(api.task.deleteTask)
   const tasks = useQuery(api.task.getTask) || [];
 
   const handleSubmit = async (e) => {
@@ -23,6 +25,17 @@ export default function Home() {
       // Handle error (e.g., show an error message to the user)
     }
   }
+
+  const handleDelete = async (taskId) => {
+    try {
+      console.log(`Deleting task with ID: ${taskId}`);
+      await deleteTask({ taskId });
+      console.log(`Task with ID ${taskId} deleted`);
+    } catch (error) {
+      console.error('Error deleting task:', error);
+    }
+  };
+  
 
   return (
     <div className="flex flex-col w-full">
@@ -51,24 +64,33 @@ export default function Home() {
           </button>
         </form>
         <div className="flex flex-col gap-8 w-full">
-        <h2 className="text-2xl font-bold text-center mt-4 text-neutral-700">Add Task</h2>
-        <div>
-            {tasks.length === 0 ? (
-              <p>No tasks available</p>
-            ) : (
-              tasks.map((task) => (
-                <div key={task.id} className="flex items-center w-full">
-                  <div className="flex justify-between items-center w-full border p-4">
-                    <div>
-                    <p>{task.text}</p>
-                    </div>
-                    <div>
-                      Delete
-                    </div>
-                  </div>
-                </div>
-              ))
-            )}
+          <h2 className="text-2xl font-bold text-center mt-4 text-neutral-700">Tasks</h2>
+          <div>
+          {tasks.length === 0 ? (
+  <p>No tasks available</p>
+) : (
+  tasks.map((task) => {
+    console.log(`Rendering task: ${JSON.stringify(task)}`); // Verify task object
+    return (
+      <div key={task._id} className="flex items-center w-full">
+        <div className="flex justify-between items-center w-full border p-4">
+          <div>
+            <p>{task.text}</p>
+          </div>
+          <div>
+            <button
+              onClick={() => handleDelete(task._id)} // Ensure this is passing the correct task.id
+              className="text-red-500"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  })
+)}
+
           </div>
         </div>
       </div>

@@ -21,3 +21,13 @@ export const getTask = query({
     return ctx.db.query("tasks").collect()
   }
 })
+
+// export const deleteTask = mutation({
+//   args: {
+//     taskId: v.string(), // Ensure this is v.string()
+//   },
+//   handler: async (ctx, args) => {
+//     console.log(`Deleting task with args: ${JSON.stringify(args)}`);
+//     await ctx.db.delete('tasks', args.taskId); // Use string ID
+//   },
+// });
